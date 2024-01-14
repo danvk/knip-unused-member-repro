@@ -1,0 +1,32 @@
+export interface Binary {
+	kind: "binary";
+	left: Expr;
+	operator: '+' | '*';
+	right: Expr;
+}
+
+export interface Grouping {
+	expr: Expr;
+	kind: "grouping";
+}
+
+export interface Literal {
+	kind: "literal";
+	value: boolean | null | number | string;
+}
+
+export interface Unary {
+	kind: "unary";
+	operator: '-' | '!';
+	right: Expr;
+}
+
+export type Expr = Binary | Grouping | Literal | Unary;
+
+export type ExpressionVisitor<R> = {
+	[Kind in Expr["kind"]]: (expr: Extract<Expr, { kind: Kind }>) => R;
+};
+
+export function visitExpr<R>(expr: Expr, visitor: ExpressionVisitor<R>): R {
+	return visitor[expr.kind](expr as never);
+}
