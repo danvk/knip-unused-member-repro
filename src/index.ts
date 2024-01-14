@@ -14,4 +14,4 @@ const expr: Expr = {
   },
 };
 
-visitExpr(expr, new Interpreter());
+console.log(visitExpr(expr, new Interpreter()));

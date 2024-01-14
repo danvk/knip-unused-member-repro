@@ -5,23 +5,12 @@ export interface Binary {
 	right: Expr;
 }
 
-export interface Grouping {
-	expr: Expr;
-	kind: "grouping";
-}
-
 export interface Literal {
 	kind: "literal";
-	value: boolean | null | number | string;
+	value: number;
 }
 
-export interface Unary {
-	kind: "unary";
-	operator: '-' | '!';
-	right: Expr;
-}
-
-export type Expr = Binary | Grouping | Literal | Unary;
+export type Expr = Binary | Literal;
 
 export type ExpressionVisitor<R> = {
 	[Kind in Expr["kind"]]: (expr: Extract<Expr, { kind: Kind }>) => R;

@@ -1,19 +1,22 @@
-import { Binary, ExpressionVisitor, Grouping, Literal, Unary } from "./interface";
+import { Binary, Expr, ExpressionVisitor, Literal, visitExpr } from "./interface";
 
-export class Interpreter implements ExpressionVisitor<unknown> {
-	binary(expr: Binary): unknown {
-    return 4;
+export class Interpreter implements ExpressionVisitor<number> {
+	binary(expr: Binary): number {
+    const left = this.evaluate(expr.left);
+    const right = this.evaluate(expr.right);
+    if (expr.operator === '+') {
+      return left + right;
+    } else if (expr.operator === '*') {
+      return left * right;
+    }
+    throw new Error('unsupported operator');
 	}
 
-	grouping(expr: Grouping): unknown {
-		return 3;
+	literal(expr: Literal): number {
+		return expr.value;
 	}
 
-	literal(expr: Literal): unknown {
-		return 2;
-	}
-
-	unary(expr: Unary): unknown {
-		return 1;
+	evaluate(expr: Expr): number {
+		return visitExpr(expr, this);
 	}
 }
